@@ -9,15 +9,29 @@ const postSlice = createSlice({
     setPosts(state, action) {
       return action.payload;
     },
+    appendPost(state, action) {
+      state.push(action.payload);
+    },
   },
 });
 
-export const { setPosts } = postSlice.actions;
+export const { setPosts, appendPost } = postSlice.actions;
 
 export const initialisePosts = () => {
   return async (dispatch) => {
     const posts = await postService.getAll();
     dispatch(setPosts(posts));
+  };
+};
+
+export const createPost = (obj) => {
+  return async (dispatch) => {
+    try {
+      const newPost = await postService.create(obj);
+      dispatch(appendPost(newPost));
+    } catch (error) {
+      console.log("Could not save the new post");
+    }
   };
 };
 
