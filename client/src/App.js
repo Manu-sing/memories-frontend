@@ -4,52 +4,54 @@ import memories from "./images/memories.png";
 import Form from "./components/Form/Form";
 import Posts from "./components/Posts/Posts";
 import useStyles from "./styles";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { initialisePosts } from "./reducers/postReducer";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/styles";
 
 const App = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts);
+  const theme = createTheme();
 
   useEffect(() => {
     dispatch(initialisePosts());
-  }, []);
-
-  console.log(posts);
+  }, [dispatch]);
 
   return (
-    <Container maxwidth="lg">
-      <AppBar className={classes.appBar} position="static" color="inherit">
-        <Typography className={classes.heading} variant="h2" aligh="center">
-          Memories
-        </Typography>
-        <img
-          className={classes.image}
-          src={memories}
-          alt="memories"
-          height="60"
-        />
-      </AppBar>
-      <Grow in>
-        <Container>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="stretch"
-            spacing={3}
-          >
-            <Grid item xs={12} sm={7}>
-              <Posts />
+    <ThemeProvider theme={theme}>
+      <Container maxwidth="lg">
+        <AppBar className={classes.appBar} position="static" color="inherit">
+          <Typography className={classes.heading} variant="h2" aligh="center">
+            Memories
+          </Typography>
+          <img
+            className={classes.image}
+            src={memories}
+            alt="memories"
+            height="60"
+          />
+        </AppBar>
+        <Grow in>
+          <Container>
+            <Grid
+              container
+              justify="space-between"
+              alignItems="stretch"
+              spacing={3}
+            >
+              <Grid item xs={12} sm={7}>
+                <Posts />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Form />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form />
-            </Grid>
-          </Grid>
-        </Container>
-      </Grow>
-    </Container>
+          </Container>
+        </Grow>
+      </Container>
+    </ThemeProvider>
   );
 };
 
