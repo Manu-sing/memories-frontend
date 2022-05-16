@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStyles from "./styles";
 import { TextField, Button, Typography, Paper, Box } from "@mui/material";
 import { useState } from "react";
-import { createPost } from "../../reducers/postReducer";
+import { createPost, updatePost } from "../../reducers/postReducer";
 import FileBase from "react-file-base64";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { setId } from "../../reducers/idReducer";
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -16,11 +18,38 @@ const Form = () => {
     selectedFile: "",
   });
   const classes = useStyles();
+  const currentId = useSelector((state) => state.currentId);
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((post) => post._id === currentId) : null
+  );
+
+  useEffect(() => {
+    if (post) {
+      setPostInfo(post);
+    }
+  }, [post]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createPost(postInfo));
+
+    if (currentId) {
+      dispatch(updatePost(currentId, postInfo));
+    } else {
+      dispatch(createPost(postInfo));
+    }
+    clear();
   };
-  const clear = () => {};
+
+  const clear = () => {
+    dispatch(setId(null));
+    setPostInfo({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -31,7 +60,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6" textAlign="center">
-          Creating a Memory
+          {currentId ? "Editing" : "Creating"} a Memory
         </Typography>
         <TextField
           margin="dense"
@@ -71,7 +100,12 @@ const Form = () => {
           label="Tags"
           fullWidth
           value={postInfo.tags}
-          onChange={(e) => setPostInfo({ ...postInfo, tags: e.target.value })}
+          onChange={(e) =>
+            setPostInfo({
+              ...postInfo,
+              tags: e.target.value.split(","),
+            })
+          }
         />
         <div className={classes.fileInput}>
           <FileBase
