@@ -1,17 +1,22 @@
 import React from "react";
-import { Container, AppBar, Typography, Grow, Grid } from "@mui/material";
+import { Container } from "@mui/material";
 // import memories from "./images/memories.png";
-import Form from "./components/Form/Form";
-import Posts from "./components/Posts/Posts";
-import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { initialisePosts } from "./reducers/postReducer";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/styles";
+import NavBar from "./components/NavBar/NavBar";
+import Home from "./components/Home/Home";
+import Auth from "./components/Auth/Auth";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
 
 const App = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const theme = createTheme();
 
@@ -20,39 +25,17 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container maxwidth="lg">
-        <AppBar className={classes.appBar} position="static" color="inherit">
-          <Typography className={classes.heading} variant="h2" aligh="center">
-            Ricordi
-          </Typography>
-          {/* <img
-            className={classes.image}
-            src={memories}
-            alt="memories"
-            height="60"
-          /> */}
-        </AppBar>
-        <Grow in>
-          <Container>
-            <Grid
-              className={classes.mainContainer}
-              container
-              direction="row"
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Grid item xs={12} sm={7}>
-                <Posts />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Form />
-              </Grid>
-            </Grid>
-          </Container>
-        </Grow>
-      </Container>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <Container maxwidth="lg">
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />}></Route>
+          </Routes>
+        </Container>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 };
 
