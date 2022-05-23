@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { AppBar, Avatar, Toolbar, Typography, Button } from "@mui/material";
 import useStyles from "./styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../Auth/firebase-config";
 import { signOut } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../reducers/auth";
 
-const NavBar = () => {
+const NavBar = ({ user, setUser }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const classes = useStyles();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
-  console.log(user);
-
-  useEffect(() => {
-    // const token = user?.token;
-    setUser(JSON.parse(localStorage.getItem("profile")));
-  }, []);
 
   const signOutFromGoogle = () => {
-    // signOut(auth).then(console.log("you have succesfully logged out"));
-    // setUser(null);
+    signOut(auth)
+      .then(dispatch(logOut()))
+      .catch((error) => {
+        console.log(error);
+      });
+    navigate("/");
+    setUser(null);
   };
 
   return (

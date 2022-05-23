@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "../../reducers/auth";
 import { useNavigate } from "react-router-dom";
 
-const Auth = () => {
+const Auth = ({ setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const Auth = () => {
             token,
           })
         );
+        setUser(JSON.parse(localStorage.getItem("profile")));
         navigate("/");
       })
       .catch((error) => {

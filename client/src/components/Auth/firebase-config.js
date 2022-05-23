@@ -26,4 +26,3 @@ provider.setCustomParameters({
 });
 
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
-

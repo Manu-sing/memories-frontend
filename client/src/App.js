@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "@mui/material";
-// import memories from "./images/memories.png";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { initialisePosts } from "./reducers/postReducer";
@@ -19,6 +18,7 @@ import {
 const App = () => {
   const dispatch = useDispatch();
   const theme = createTheme();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   useEffect(() => {
     dispatch(initialisePosts());
@@ -28,10 +28,10 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Container maxwidth="lg">
-          <NavBar />
+          <NavBar user={user} setUser={setUser} />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />}></Route>
+            <Route path="/auth" element={<Auth setUser={setUser} />}></Route>
           </Routes>
         </Container>
       </ThemeProvider>
