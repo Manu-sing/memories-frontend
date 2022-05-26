@@ -13,20 +13,40 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input";
 import { signInWithGoogle } from "./firebase-config";
 import { useDispatch } from "react-redux";
-import { setAuth } from "../../reducers/auth";
+import { setAuth, signup, signin } from "../../reducers/auth";
 import { useNavigate } from "react-router-dom";
 
-const Auth = ({ setUser }) => {
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const classes = useStyles();
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    if (isSignup) {
+      // implement the logic to sign up the user
+      dispatch(signup(formData, navigate));
+    } else {
+      dispatch(signin(formData, navigate));
+    }
+  };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -54,7 +74,6 @@ const Auth = ({ setUser }) => {
             token,
           })
         );
-        setUser(JSON.parse(localStorage.getItem("profile")));
         navigate("/");
       })
       .catch((error) => {
@@ -99,7 +118,7 @@ const Auth = ({ setUser }) => {
               name="password"
               label="Password"
               handleChange={handleChange}
-              type={showPassword ? "password" : "text"}
+              type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
             />
             {isSignup && (
@@ -120,24 +139,6 @@ const Auth = ({ setUser }) => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
-          {/* <GoogleLogin
-            clientId="1006510176096-hr577fca6gjp64gb8sot17l7c589ratg.apps.googleusercontent.com"
-            render={(renderProps) => (
-              <Button
-                className={classes.googleButton}
-                color="primary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                variant="contained"
-              >
-                Google Sign In
-              </Button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          /> */}
           <Button
             className={classes.googleButton}
             color="primary"

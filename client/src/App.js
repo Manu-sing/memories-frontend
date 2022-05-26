@@ -18,7 +18,7 @@ import {
 const App = () => {
   const dispatch = useDispatch();
   const theme = createTheme();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  // const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   useEffect(() => {
     dispatch(initialisePosts());
@@ -28,10 +28,10 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Container maxwidth="lg">
-          <NavBar user={user} setUser={setUser} />
+          <NavBar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth setUser={setUser} />}></Route>
+            <Route path="/auth" element={<Auth />}></Route>
           </Routes>
         </Container>
       </ThemeProvider>

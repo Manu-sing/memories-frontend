@@ -1,6 +1,11 @@
 import axios from "axios";
-
 const baseUrl = "/api/posts";
+
+let token = null;
+
+const setToken = (newToken) => {
+  token = `bearer ${newToken}`;
+};
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -8,7 +13,11 @@ const getAll = async () => {
 };
 
 const create = async (newObj) => {
-  const response = await axios.post(baseUrl, newObj);
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.post(baseUrl, newObj, config);
   return response.data;
 };
 
@@ -17,9 +26,12 @@ const update = async (id, newObject) => {
   return response.data;
 };
 
-const removeBlog = async (id) => {
-  const response = await axios.delete(`${baseUrl}/${id}`);
+const removeThePost = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.delete(`${baseUrl}/${id}`, config);
   return response.data;
 };
 
-export default { getAll, create, removeBlog, update };
+export default { getAll, create, removeThePost, update, setToken };

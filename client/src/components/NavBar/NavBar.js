@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Avatar, Toolbar, Typography, Button } from "@mui/material";
 import useStyles from "./styles";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../Auth/firebase-config";
 import { signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../reducers/auth";
 
-const NavBar = ({ user, setUser }) => {
+const NavBar = () => {
   const dispatch = useDispatch();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const navigate = useNavigate();
   const classes = useStyles();
+  const location = useLocation();
 
   const signOutFromGoogle = () => {
     signOut(auth)
@@ -21,6 +23,11 @@ const NavBar = ({ user, setUser }) => {
     navigate("/");
     setUser(null);
   };
+
+  useEffect(() => {
+    const token = user?.token;
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -38,9 +45,12 @@ const NavBar = ({ user, setUser }) => {
       <Toolbar className={classes.toolbar}>
         {user ? (
           <div className={classes.profile}>
-            <Avatar className={classes.purple} alt={user.name} src={user.url}>
-              {/* {user.name.chartAt(0)} */}
-            </Avatar>
+            {user.token.length > 500 ? (
+              <Avatar className={classes.purple} alt={user.name} src={user.url}>
+                {/* {user.name.chartAt(0)} */}
+              </Avatar>
+            ) : null}
+
             <Typography className={classes.username} variant="h6">
               {user.name}
             </Typography>

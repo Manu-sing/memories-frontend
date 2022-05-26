@@ -47,6 +47,7 @@ export const createPost = (obj) => {
       dispatch(appendPost(newPost));
     } catch (error) {
       console.log("Could not save the new post");
+      console.log(error);
     }
   };
 };
@@ -54,10 +55,11 @@ export const createPost = (obj) => {
 export const removePost = (id) => {
   return async (dispatch) => {
     try {
-      await postService.removeBlog(id);
+      await postService.removeThePost(id);
       dispatch(detachPost(id));
     } catch (error) {
       console.log("Could not delete the post");
+      console.log(error);
     }
   };
 };
