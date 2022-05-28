@@ -16,21 +16,20 @@ const create = async (newObj) => {
   const config = {
     headers: { Authorization: token },
   };
-
   const response = await axios.post(baseUrl, newObj, config);
   return response.data;
 };
 
 const update = async (id, newObject) => {
-  const response = await axios.put(`${baseUrl}/${id}`, newObject);
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
   return response.data;
 };
 
 const removeThePost = async (id) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const response = await axios.delete(`${baseUrl}/${id}`, config);
+  const response = await axios.delete(`${baseUrl}/${id}`);
   return response.data;
 };
 

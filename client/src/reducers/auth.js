@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import loginService from "../services/signin";
+import signupService from "../services/signup";
 import postService from "../services/posts";
 
 const authSlice = createSlice({
@@ -33,6 +34,7 @@ export const signin = (formData, navigate) => {
       );
       navigate("/");
     } catch (error) {
+      console.log("Login was unsuccessful. Try again later.");
       console.log(error);
     }
   };
@@ -41,7 +43,15 @@ export const signin = (formData, navigate) => {
 export const signup = (formData, navigate) => {
   return async (dispatch) => {
     try {
-      // signup that user
+      const user = await signupService.registration(formData);
+      postService.setToken(user.token);
+      dispatch(
+        setAuth({
+          name: user.result.name,
+          email: user.result.email,
+          token: user.token,
+        })
+      );
       navigate("/");
     } catch (error) {
       console.log(error);

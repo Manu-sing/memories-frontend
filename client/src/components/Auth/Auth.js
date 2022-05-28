@@ -78,7 +78,7 @@ const Auth = () => {
       })
       .catch((error) => {
         console.log(error);
-        console.log("Login was unsuccesfull. Try again later.");
+        console.log("Login with Google was unsuccesfull. Try again later.");
       });
   };
 
