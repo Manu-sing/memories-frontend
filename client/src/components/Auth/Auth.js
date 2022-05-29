@@ -24,7 +24,7 @@ const initialState = {
   confirmPassword: "",
 };
 
-const Auth = () => {
+const Auth = ({ setMessage, setTypeOfMessage }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState(initialState);
@@ -38,9 +38,9 @@ const Auth = () => {
     console.log(formData);
     if (isSignup) {
       // implement the logic to sign up the user
-      dispatch(signup(formData, navigate));
+      dispatch(signup(setMessage, setTypeOfMessage, formData, navigate));
     } else {
-      dispatch(signin(formData, navigate));
+      dispatch(signin(setMessage, setTypeOfMessage, formData, navigate));
     }
   };
 
@@ -74,11 +74,22 @@ const Auth = () => {
             token,
           })
         );
+        setTypeOfMessage("success");
+        setMessage(`Welcome ${res.user.displayName}.`);
+        setTimeout(() => {
+          setMessage(null);
+          setTypeOfMessage(null);
+        }, 8000);
         navigate("/");
       })
       .catch((error) => {
+        setTypeOfMessage("error");
+        setMessage("Login with Google was unsuccesfull. Try again later.");
+        setTimeout(() => {
+          setMessage(null);
+          setTypeOfMessage(null);
+        }, 6000);
         console.log(error);
-        console.log("Login with Google was unsuccesfull. Try again later.");
       });
   };
 

@@ -14,8 +14,11 @@ import {
   Route,
   BrowserRouter,
 } from "react-router-dom";
+import Message from "./Notification/Message";
 
 const App = () => {
+  const [message, setMessage] = useState(null);
+  const [typeOfMessage, setTypeOfMessage] = useState(null);
   const dispatch = useDispatch();
   const theme = createTheme();
   // const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -29,9 +32,31 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <Container maxwidth="lg">
           <NavBar />
+          {message && typeOfMessage ? (
+            <Message
+              message={message}
+              typeOfMessage={typeOfMessage === "success" ? "success" : "error"}
+            ></Message>
+          ) : null}
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />}></Route>
+            <Route
+              path="/"
+              element={
+                <Home
+                  setMessage={setMessage}
+                  setTypeOfMessage={setTypeOfMessage}
+                />
+              }
+            />
+            <Route
+              path="/auth"
+              element={
+                <Auth
+                  setMessage={setMessage}
+                  setTypeOfMessage={setTypeOfMessage}
+                />
+              }
+            ></Route>
           </Routes>
         </Container>
       </ThemeProvider>

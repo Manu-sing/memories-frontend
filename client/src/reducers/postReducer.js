@@ -40,25 +40,47 @@ export const initialisePosts = () => {
   };
 };
 
-export const createPost = (obj) => {
+export const createPost = (setMessage, setTypeOfMessage, obj) => {
   return async (dispatch) => {
     try {
       const newPost = await postService.create(obj);
       dispatch(appendPost(newPost));
+      setTypeOfMessage("success");
+      setMessage("Your new post was created succesfully.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 6000);
     } catch (error) {
-      console.log("Could not save the new post");
+      setTypeOfMessage("error");
+      setMessage("Could not create the new post.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 6000);
       console.log(error);
     }
   };
 };
 
-export const removePost = (id) => {
+export const removePost = (setMessage, setTypeOfMessage, id) => {
   return async (dispatch) => {
     try {
       await postService.removeThePost(id);
       dispatch(detachPost(id));
+      setTypeOfMessage("success");
+      setMessage("Your new post was deleted succesfully.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 8000);
     } catch (error) {
-      console.log("Could not delete the post");
+      setTypeOfMessage("error");
+      setMessage("Could not delete the post.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 8000);
       console.log(error);
     }
   };

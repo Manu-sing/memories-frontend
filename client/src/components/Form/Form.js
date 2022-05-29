@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setId } from "../../reducers/idReducer";
 
-const Form = () => {
+const Form = ({ setMessage, setTypeOfMessage }) => {
   const dispatch = useDispatch();
   const [postInfo, setPostInfo] = useState({
     creator: "",
@@ -35,7 +35,7 @@ const Form = () => {
     if (currentId) {
       dispatch(updatePost(currentId, postInfo));
     } else {
-      dispatch(createPost(postInfo));
+      dispatch(createPost(setMessage, setTypeOfMessage, postInfo));
     }
     clear();
   };

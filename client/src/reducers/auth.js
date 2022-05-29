@@ -20,7 +20,7 @@ const authSlice = createSlice({
 
 export const { setAuth, logOut } = authSlice.actions;
 
-export const signin = (formData, navigate) => {
+export const signin = (setMessage, setTypeOfMessage, formData, navigate) => {
   return async (dispatch) => {
     try {
       const user = await loginService.login(formData);
@@ -33,14 +33,25 @@ export const signin = (formData, navigate) => {
         })
       );
       navigate("/");
+      setTypeOfMessage("success");
+      setMessage(`Welcome ${user.result.name}.`);
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 8000);
     } catch (error) {
-      console.log("Login was unsuccessful. Try again later.");
+      setTypeOfMessage("error");
+      setMessage("Login was unsuccessful. Try again.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 8000);
       console.log(error);
     }
   };
 };
 
-export const signup = (formData, navigate) => {
+export const signup = (setMessage, setTypeOfMessage, formData, navigate) => {
   return async (dispatch) => {
     try {
       const user = await signupService.registration(formData);
@@ -53,7 +64,19 @@ export const signup = (formData, navigate) => {
         })
       );
       navigate("/");
+      setTypeOfMessage("success");
+      setMessage(`Welcome ${user.result.name}.`);
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 10000);
     } catch (error) {
+      setTypeOfMessage("error");
+      setMessage("Signup was unsuccessful. Try again.");
+      setTimeout(() => {
+        setMessage(null);
+        setTypeOfMessage(null);
+      }, 10000);
       console.log(error);
     }
   };

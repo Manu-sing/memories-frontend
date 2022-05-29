@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removePost, likeAPost } from "../../reducers/postReducer";
 import { setId } from "../../reducers/idReducer";
 
-const Posts = () => {
+const Posts = ({ setMessage, setTypeOfMessage }) => {
   const posts = useSelector((state) => state.posts);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const Posts = () => {
   };
 
   const deletePost = (id) => {
-    dispatch(removePost(id));
+    dispatch(removePost(setMessage, setTypeOfMessage, id));
   };
 
   const likeThatPost = (id) => {
