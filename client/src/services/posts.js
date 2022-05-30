@@ -4,7 +4,11 @@ const baseUrl = "/api/posts";
 let token = null;
 
 const setToken = (newToken) => {
-  token = `bearer ${newToken}`;
+  if (localStorage.getItem("profile")) {
+    token = `bearer ${newToken}`;
+  } else {
+    console.log("token is not saved in the local storage");
+  }
 };
 
 const getAll = async () => {
@@ -13,6 +17,7 @@ const getAll = async () => {
 };
 
 const create = async (newObj) => {
+  console.log(token);
   const config = {
     headers: { Authorization: token },
   };
@@ -21,6 +26,7 @@ const create = async (newObj) => {
 };
 
 const update = async (id, newObject) => {
+  console.log(token);
   const config = {
     headers: { Authorization: token },
   };
@@ -29,7 +35,11 @@ const update = async (id, newObject) => {
 };
 
 const removeThePost = async (id) => {
-  const response = await axios.delete(`${baseUrl}/${id}`);
+  console.log(token);
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.delete(`${baseUrl}/${id}`, config);
   return response.data;
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStyles from "./styles";
 import { useState } from "react";
 import {
@@ -15,6 +15,7 @@ import { signInWithGoogle } from "./firebase-config";
 import { useDispatch } from "react-redux";
 import { setAuth, signup, signin } from "../../reducers/auth";
 import { useNavigate } from "react-router-dom";
+import tokenService from "../../services/posts";
 
 const initialState = {
   firstName: "",
@@ -30,17 +31,16 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const classes = useStyles();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
     if (isSignup) {
       // implement the logic to sign up the user
-      dispatch(signup(setMessage, setTypeOfMessage, formData, navigate));
+      await dispatch(signup(setMessage, setTypeOfMessage, formData, navigate));
     } else {
-      dispatch(signin(setMessage, setTypeOfMessage, formData, navigate));
+      await dispatch(signin(setMessage, setTypeOfMessage, formData, navigate));
     }
   };
 
@@ -74,12 +74,13 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
             token,
           })
         );
+        tokenService.setToken(token);
         setTypeOfMessage("success");
         setMessage(`Welcome ${res.user.displayName}.`);
         setTimeout(() => {
           setMessage(null);
           setTypeOfMessage(null);
-        }, 8000);
+        }, 6000);
         navigate("/");
       })
       .catch((error) => {
