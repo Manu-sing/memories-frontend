@@ -6,6 +6,6 @@ It is a social media app where the user can signup, login, create, read, edit an
 
 The techologies used are react, redux and material ui.
 
-You can find the frontend of the app here: https://github.com/Manu-sing/memories-backend
+You can find the backend of the app here: https://github.com/Manu-sing/memories-backend
 
 And the final project deployed here: https://ricordi-project.herokuapp.com/.
