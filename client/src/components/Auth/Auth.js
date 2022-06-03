@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useStyles from "./styles";
 import { useState } from "react";
 import {
@@ -11,11 +11,10 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input";
-import { signInWithGoogle } from "./firebase-config";
+// import { signInWithGoogle } from "./firebase-config";
 import { useDispatch } from "react-redux";
-import { setAuth, signup, signin } from "../../reducers/auth";
+import { signup, signin } from "../../reducers/auth";
 import { useNavigate } from "react-router-dom";
-import tokenService from "../../services/posts";
 
 const initialState = {
   firstName: "",
@@ -25,7 +24,7 @@ const initialState = {
   confirmPassword: "",
 };
 
-const Auth = ({ setMessage, setTypeOfMessage }) => {
+const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState(initialState);
@@ -38,9 +37,9 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
     console.log(formData);
     if (isSignup) {
       // implement the logic to sign up the user
-      await dispatch(signup(setMessage, setTypeOfMessage, formData, navigate));
+      await dispatch(signup(formData, navigate));
     } else {
-      await dispatch(signin(setMessage, setTypeOfMessage, formData, navigate));
+      await dispatch(signin(formData, navigate));
     }
   };
 
@@ -59,40 +58,41 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
     console.log(isSignup);
   };
 
-  const loginWithGoogle = () => {
-    signInWithGoogle()
-      .then((res) => {
-        const name = res?.user.displayName;
-        const email = res?.user.email;
-        const url = res?.user.photoURL;
-        const token = res?._tokenResponse.idToken;
-        dispatch(
-          setAuth({
-            name,
-            email,
-            url,
-            token,
-          })
-        );
-        tokenService.setToken(token);
-        setTypeOfMessage("success");
-        setMessage(`Welcome ${res.user.displayName}.`);
-        setTimeout(() => {
-          setMessage(null);
-          setTypeOfMessage(null);
-        }, 6000);
-        navigate("/");
-      })
-      .catch((error) => {
-        setTypeOfMessage("error");
-        setMessage("Login with Google was unsuccesfull. Try again later.");
-        setTimeout(() => {
-          setMessage(null);
-          setTypeOfMessage(null);
-        }, 6000);
-        console.log(error);
-      });
-  };
+  // const loginWithGoogle = () => {
+  //   signInWithGoogle()
+  //     .then((res) => {
+  //       console.log(res);
+  //       const name = res?.user.displayName;
+  //       const email = res?.user.email;
+  //       const url = res?.user.photoURL;
+  //       const token = res?._tokenResponse.idToken;
+  //       dispatch(
+  //         setAuth({
+  //           name,
+  //           email,
+  //           url,
+  //           token,
+  //         })
+  //       );
+  //       tokenService.setToken();
+  //       setTypeOfMessage("success");
+  //       setMessage(`Welcome ${res.user.displayName}.`);
+  //       setTimeout(() => {
+  //         setMessage(null);
+  //         setTypeOfMessage(null);
+  //       }, 6000);
+  //       navigate("/");
+  //     })
+  //     .catch((error) => {
+  //       setTypeOfMessage("error");
+  //       setMessage("Login with Google was unsuccesfull. Try again later.");
+  //       setTimeout(() => {
+  //         setMessage(null);
+  //         setTypeOfMessage(null);
+  //       }, 6000);
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -151,7 +151,7 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
-          <Button
+          {/* <Button
             className={classes.googleButton}
             color="primary"
             variant="contained"
@@ -159,7 +159,7 @@ const Auth = ({ setMessage, setTypeOfMessage }) => {
             onClick={loginWithGoogle}
           >
             Google Sign In
-          </Button>
+          </Button> */}
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>

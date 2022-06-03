@@ -17,6 +17,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import postReducer from "./reducers/postReducer";
 import idReducer from "./reducers/idReducer";
 import authReducer from "./reducers/auth";
+import notificationReducer from "./reducers/notificationReducer";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import {
@@ -38,6 +39,7 @@ const reducers = combineReducers({
   posts: postReducer,
   currentId: idReducer,
   auth: authReducer,
+  notification: notificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

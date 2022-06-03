@@ -1,15 +1,24 @@
 import axios from "axios";
 const baseUrl = "/api/posts";
 
-let token = null;
+let token;
 
-const setToken = (newToken) => {
+const setToken = () => {
   if (localStorage.getItem("profile")) {
-    token = `bearer ${newToken}`;
+    token = `bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
   } else {
-    console.log("token is not saved in the local storage");
+    token = null;
   }
+  return token;
 };
+
+// const setToken = (newToken) => {
+//   if (localStorage.getItem("profile")) {
+//     token = `bearer ${newToken}`;
+//   } else {
+//     console.log("token is not saved in the local storage");
+//   }
+// };
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -17,27 +26,24 @@ const getAll = async () => {
 };
 
 const create = async (newObj) => {
-  console.log(token);
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: setToken() },
   };
   const response = await axios.post(baseUrl, newObj, config);
   return response.data;
 };
 
 const update = async (id, newObject) => {
-  console.log(token);
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: setToken() },
   };
   const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
   return response.data;
 };
 
 const removeThePost = async (id) => {
-  console.log(token);
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: setToken() },
   };
   const response = await axios.delete(`${baseUrl}/${id}`, config);
   return response.data;

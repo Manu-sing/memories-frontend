@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Avatar, Toolbar, Typography, Button } from "@mui/material";
 import useStyles from "./styles";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { auth } from "../Auth/firebase-config";
-import { signOut } from "firebase/auth";
+// import { auth } from "../Auth/firebase-config";
+// import { signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../reducers/auth";
 
@@ -14,14 +14,23 @@ const NavBar = () => {
   const classes = useStyles();
   const location = useLocation();
 
-  const signOutFromGoogle = () => {
-    signOut(auth)
-      .then(dispatch(logOut()))
-      .catch((error) => {
-        console.log(error);
-      });
-    navigate("/");
-    setUser(null);
+  // const signOutFromGoogle = () => {
+  //   signOut(auth)
+  //     .then(dispatch(logOut()))
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   navigate("/");
+  //   setUser(null);
+  // };
+
+  const logUserOut = () => {
+    try {
+      dispatch(logOut());
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -58,7 +67,7 @@ const NavBar = () => {
               variant="contained"
               className={classes.logout}
               color="secondary"
-              onClick={signOutFromGoogle}
+              onClick={logUserOut}
             >
               Sign out
             </Button>

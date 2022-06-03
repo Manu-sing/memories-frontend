@@ -5,9 +5,11 @@ import { Grid, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { removePost, likeAPost } from "../../reducers/postReducer";
 import { setId } from "../../reducers/idReducer";
+import DefaultPost from "./Post/DefaultPost";
 
-const Posts = ({ setMessage, setTypeOfMessage }) => {
+const Posts = () => {
   const posts = useSelector((state) => state.posts);
+  const user = useSelector((state) => state.auth.authData);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -17,7 +19,7 @@ const Posts = ({ setMessage, setTypeOfMessage }) => {
   };
 
   const deletePost = (id) => {
-    dispatch(removePost(setMessage, setTypeOfMessage, id));
+    dispatch(removePost(id));
   };
 
   const likeThatPost = (id) => {
@@ -29,8 +31,8 @@ const Posts = ({ setMessage, setTypeOfMessage }) => {
     dispatch(likeAPost(id, editedPost));
   };
 
-  if (!posts.length) {
-    return <CircularProgress />;
+  if (user === null) {
+    return <DefaultPost />;
   } else {
     return (
       <Grid

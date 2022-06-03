@@ -3,7 +3,7 @@ import { Grow, Container, Grid } from "@mui/material";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 
-const Home = ({ setMessage, setTypeOfMessage }) => {
+const Home = () => {
   return (
     <Grow in>
       <Container>
@@ -14,13 +14,10 @@ const Home = ({ setMessage, setTypeOfMessage }) => {
           spacing={3}
         >
           <Grid item xs={12} sm={7}>
-            <Posts
-              setMessage={setMessage}
-              setTypeOfMessage={setTypeOfMessage}
-            />
+            <Posts />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Form setMessage={setMessage} setTypeOfMessage={setTypeOfMessage} />
+            <Form />
           </Grid>
         </Grid>
       </Container>

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import postService from "../services/posts";
+import { handleNotification } from "./notificationReducer";
 
 const postSlice = createSlice({
   name: "posts",
@@ -40,47 +41,54 @@ export const initialisePosts = () => {
   };
 };
 
-export const createPost = (setMessage, setTypeOfMessage, obj) => {
+export const createPost = (obj) => {
   return async (dispatch) => {
     try {
+      if (obj.title === "" || obj.creator === "" || obj.message === "") {
+        const msg = {
+          message: "The fields creator, title and message must be provided.",
+          typeOfMessage: "warning",
+        };
+        dispatch(handleNotification(msg, 8000));
+
+        return;
+      }
       const newPost = await postService.create(obj);
       dispatch(appendPost(newPost));
-      setTypeOfMessage("success");
-      setMessage("Your new post was created succesfully.");
-      setTimeout(() => {
-        setMessage(null);
-        setTypeOfMessage(null);
-      }, 6000);
+      const msg = {
+        message: "Your post was successfully created.",
+        typeOfMessage: "success",
+      };
+      dispatch(handleNotification(msg, 8000));
     } catch (error) {
-      setTypeOfMessage("error");
-      setMessage("Could not create the new post.");
-      setTimeout(() => {
-        setMessage(null);
-        setTypeOfMessage(null);
-      }, 6000);
+      const msg = {
+        message:
+          "Could not create the new post. You can only create a new post if you are signed in.",
+        typeOfMessage: "success",
+      };
+      dispatch(handleNotification(msg, 8000));
       console.log(error);
     }
   };
 };
 
-export const removePost = (setMessage, setTypeOfMessage, id) => {
+export const removePost = (id) => {
   return async (dispatch) => {
     try {
       await postService.removeThePost(id);
       dispatch(detachPost(id));
-      setTypeOfMessage("success");
-      setMessage("Your new post was deleted succesfully.");
-      setTimeout(() => {
-        setMessage(null);
-        setTypeOfMessage(null);
-      }, 8000);
+      const msg = {
+        message: "Your post was succesfully deleted.",
+        typeOfMessage: "success",
+      };
+      dispatch(handleNotification(msg, 8000));
     } catch (error) {
-      setTypeOfMessage("error");
-      setMessage("Could not delete the post.");
-      setTimeout(() => {
-        setMessage(null);
-        setTypeOfMessage(null);
-      }, 8000);
+      const msg = {
+        message:
+          "Could not delete the post. You can only delete a post if you are signed in and you were the one who created it.",
+        typeOfMessage: "error",
+      };
+      dispatch(handleNotification(msg, 8000));
       console.log(error);
     }
   };
@@ -88,15 +96,35 @@ export const removePost = (setMessage, setTypeOfMessage, id) => {
 
 export const updatePost = (id, obj) => {
   return async (dispatch) => {
-    const updatedPost = await postService.update(id, obj);
-    dispatch(updateThePost(updatedPost));
+    try {
+      const updatedPost = await postService.update(id, obj);
+      dispatch(updateThePost(updatedPost));
+    } catch (error) {
+      const msg = {
+        message:
+          "Couldn't edit the post. You can only perform this action if you are signed in and you were the one who created the post.",
+        typeOfMessage: "error",
+      };
+      dispatch(handleNotification(msg, 8000));
+      console.log(error);
+    }
   };
 };
 
 export const likeAPost = (id, obj) => {
   return async (dispatch) => {
-    await postService.update(id, obj);
-    dispatch(likeIt(id));
+    try {
+      await postService.update(id, obj);
+      dispatch(likeIt(id));
+    } catch (error) {
+      const msg = {
+        message:
+          "Couldn't like the post. You can only perform this action if you are signed in and you were the one who created the post.",
+        typeOfMessage: "error",
+      };
+      dispatch(handleNotification(msg, 8000));
+      console.log(error);
+    }
   };
 };
 

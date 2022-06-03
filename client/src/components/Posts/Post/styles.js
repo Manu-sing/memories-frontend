@@ -22,6 +22,15 @@ export default makeStyles({
     width: "100%",
     position: "relative",
   },
+  defaultCard: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    borderRadius: "15px",
+    height: "350px",
+    width: "250px",
+    position: "relative",
+  },
   overlay: {
     position: "absolute",
     top: "20px",
